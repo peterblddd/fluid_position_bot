@@ -505,11 +505,12 @@ def main():
     # Add message handler
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     
-    # Start monitor task in background
-    asyncio.create_task(start_monitor_task(application))
-    
     logger.info("Bot started and waiting for messages...")
     logger.info("Position monitor will start shortly...")
+    
+    # Start monitor task after event loop is running
+    application.post_init = start_monitor_task
+    
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 
