@@ -484,7 +484,8 @@ async def start_monitor_task(application: Application):
     monitor = PositionMonitor(bot, db, check_interval=1800)  # 30 minutes
     
     logger.info("Starting position monitor...")
-    await monitor.start_monitoring()
+    # Run monitoring in background task (don't await)
+    asyncio.create_task(monitor.start_monitoring())
 
 
 def main():
